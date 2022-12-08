@@ -12,7 +12,11 @@ import static ru.hogwarts.school.Constant.*;
 
 class FacultyServiceTest {
 
-    private final FacultyService out = new FacultyService();
+    private final FacultyService out;
+
+    FacultyServiceTest(FacultyService out) {
+        this.out = out;
+    }
 
     @Test
     void shouldReturnFacultyInMethodCreateFaculty() {
@@ -74,13 +78,6 @@ class FacultyServiceTest {
     void shouldReturnStudentInMethodUpdateFaculty() {
         out.createFaculty(FACULTY_AAA);
         Faculty actual = out.updateFaculty(FACULTY_AAA);
-        Assertions.assertEquals(FACULTY_AAA, actual);
-    }
-
-    @Test
-    void shouldReturnStudentInMethodRemoveFaculty() {
-        out.createFaculty(FACULTY_AAA);
-        Faculty actual = out.removeFaculty(LONG_NUM_1);
         Assertions.assertEquals(FACULTY_AAA, actual);
     }
 }

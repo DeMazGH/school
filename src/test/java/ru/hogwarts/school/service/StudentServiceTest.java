@@ -11,7 +11,11 @@ import static ru.hogwarts.school.Constant.*;
 
 class StudentServiceTest {
 
-    private final StudentService out = new StudentService();
+    private final StudentService out;
+
+    public StudentServiceTest(StudentService out) {
+        this.out = out;
+    }
 
     @Test
     void shouldReturnStudentInMethodCreate() {
@@ -73,13 +77,6 @@ class StudentServiceTest {
     void shouldReturnStudentInMethodUpdateStudent() {
         out.createStudent(STUDENT_AAA);
         Student actual = out.updateStudent(STUDENT_AAA);
-        assertEquals(STUDENT_AAA, actual);
-    }
-
-    @Test
-    void shouldReturnStudentInMethodRemoveStudent() {
-        out.createStudent(STUDENT_AAA);
-        Student actual = out.removeStudent(LONG_NUM_1);
         assertEquals(STUDENT_AAA, actual);
     }
 }

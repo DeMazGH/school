@@ -4,10 +4,10 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 
 public class Constant {
-    public static Long LONG_NUM_1 = 1L;
-    public static Long LONG_NUM_2 = 2L;
-    public static Long LONG_NUM_3 = 3L;
-    public static Long LONG_NUM_4 = 4L;
+    public static long LONG_NUM_1 = 1L;
+    public static long LONG_NUM_2 = 2L;
+    public static long LONG_NUM_3 = 3L;
+    public static long LONG_NUM_4 = 4L;
 
     public static int NUM_1 = 1;
     public static int NUM_2 = 2;
