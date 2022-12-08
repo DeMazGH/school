@@ -71,6 +71,7 @@ class StudentServiceTest {
 
     @Test
     void shouldReturnStudentInMethodUpdateStudent() {
+        out.createStudent(STUDENT_AAA);
         Student actual = out.updateStudent(STUDENT_AAA);
         assertEquals(STUDENT_AAA, actual);
     }

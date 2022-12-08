@@ -72,6 +72,7 @@ class FacultyServiceTest {
 
     @Test
     void shouldReturnStudentInMethodUpdateFaculty() {
+        out.createFaculty(FACULTY_AAA);
         Faculty actual = out.updateFaculty(FACULTY_AAA);
         Assertions.assertEquals(FACULTY_AAA, actual);
     }
