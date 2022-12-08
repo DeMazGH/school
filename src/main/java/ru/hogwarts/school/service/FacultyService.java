@@ -32,6 +32,9 @@ public class FacultyService {
     }
 
     public Faculty updateFaculty(Faculty faculty) {
+        if (!faculties.containsKey(faculty.getId())) {
+            return null;
+        }
         faculties.put(faculty.getId(), faculty);
         return faculty;
     }
