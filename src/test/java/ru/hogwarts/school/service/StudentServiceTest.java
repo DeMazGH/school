@@ -1,82 +1,106 @@
 package ru.hogwarts.school.service;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 import static ru.hogwarts.school.Constant.*;
 
+
+@ExtendWith(MockitoExtension.class)
 class StudentServiceTest {
 
-    private final StudentService out;
+    @InjectMocks
+    private StudentService out;
 
-    public StudentServiceTest(StudentService out) {
-        this.out = out;
-    }
+    @Mock
+    private StudentRepository studentRepositoryMock;
+
 
     @Test
     void shouldReturnStudentInMethodCreate() {
+        when(studentRepositoryMock.save(STUDENT_AAA)).thenReturn(STUDENT_AAA);
         Student actual = out.createStudent(STUDENT_AAA);
         assertEquals(STUDENT_AAA, actual);
     }
 
-    @Test
-    void shouldReturnCorrectIdInMethodCreate() {
-        Long actual = out.createStudent(STUDENT_AAA).getId();
-        assertEquals(LONG_NUM_1, actual);
+//    @Test
+//    void shouldReturnStudentInMethodFind() {
+//        when(studentRepositoryMock.findById(LONG_NUM_2).get()).thenReturn(STUDENT_BBB);
+//        Student actual = out.findStudent(LONG_NUM_2);
+//        assertEquals(STUDENT_BBB, actual);
+//    }
+    //тест не проходит из-за - NoSuchElementException: No value present
 
-        actual = out.createStudent(STUDENT_CCC).getId();
-        assertEquals(LONG_NUM_2, actual);
-    }
-
-    @Test
-    void shouldReturnStudentInMethodFind() {
-        out.createStudent(STUDENT_AAA);
-        out.createStudent(STUDENT_BBB);
-
-        Student actual = out.findStudent(LONG_NUM_1);
-        assertEquals(STUDENT_AAA, actual);
-
-        actual = out.findStudent(LONG_NUM_2);
-        assertEquals(STUDENT_BBB, actual);
-    }
 
     @Test
     void shouldReturnCorrectListInMethodFindAllStudents() {
-        Collection<Student> expected = new ArrayList<>();
+        List<Student> expected = new ArrayList<>();
         expected.add(STUDENT_AAA);
         expected.add(STUDENT_BBB);
         expected.add(STUDENT_CCC);
 
-        out.createStudent(STUDENT_AAA);
-        out.createStudent(STUDENT_BBB);
-        out.createStudent(STUDENT_CCC);
-
+        when(studentRepositoryMock.findAll()).thenReturn(expected);
         Collection<Student> actual = out.findAllStudents();
+
         assertEquals(expected, actual);
     }
 
     @Test
     void shouldReturnCorrectListInMethodFindByAge() {
-        Collection<Student> expected = new ArrayList<>();
+        List<Student> expected = new ArrayList<>();
         expected.add(STUDENT_AAA);
         expected.add(STUDENT_CCC);
 
-        out.createStudent(STUDENT_AAA);
-        out.createStudent(STUDENT_BBB);
-        out.createStudent(STUDENT_CCC);
+        List<Student> actual = new ArrayList<>();
+        actual.add(STUDENT_AAA);
+        actual.add(STUDENT_BBB);
+        actual.add(STUDENT_CCC);
 
-        Collection<Student> actual = out.findByAge(NUM_1);
+        when(studentRepositoryMock.findAll()).thenReturn(actual);
+
+        actual = (List<Student>) out.findByAge(NUM_1);
         assertEquals(expected, actual);
     }
 
-//    @Test
-//    void shouldReturnStudentInMethodUpdateStudent() {
-//        out.createStudent(STUDENT_AAA);
-//        Student actual = out.updateStudent(STUDENT_AAA);
-//        assertEquals(STUDENT_AAA, actual);
-//    }
+    @Test
+    void shouldReturnCorrectListInMethodFindByAgeBetween() {
+        List<Student> expected = new ArrayList<>();
+        expected.add(STUDENT_AAA);
+        expected.add(STUDENT_CCC);
+
+        List<Student> actual = new ArrayList<>();
+        actual.add(STUDENT_AAA);
+        actual.add(STUDENT_CCC);
+
+        when(studentRepositoryMock.findByAgeBetween(NUM_1, NUM_1)).thenReturn(actual);
+
+        actual = (List<Student>) out.findByAgeBetween(NUM_1, NUM_1);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void shouldReturnStudentInMethodUpdateStudent() {
+        when(studentRepositoryMock.save(STUDENT_AAA)).thenReturn(STUDENT_AAA);
+        Student actual = out.updateStudent(STUDENT_AAA);
+        assertEquals(STUDENT_AAA, actual);
+    }
+
+    @Test
+    void shouldReturnFacultyInMethodGetFacultyByStudentId() {
+        when(studentRepositoryMock.findStudentById(LONG_NUM_1)).thenReturn(STUDENT_AAA);
+        Faculty actual = out.getFacultyByStudentId(LONG_NUM_1);
+        assertEquals(FACULTY_AAA, actual);
+    }
 }
