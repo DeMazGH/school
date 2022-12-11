@@ -27,11 +27,11 @@ public class Constant {
 
     public static List<Student> STUDENT_LIST_1 = new ArrayList<>();
     public static Faculty FACULTY_AAA = new Faculty(LONG_NUM_1, NAME_AAA, COLOR_AAA, STUDENT_LIST_1);
-    public static Faculty FACULTY_BBB = new Faculty(LONG_NUM_1, NAME_BBB, COLOR_BBB, STUDENT_LIST_1);
-    public static Faculty FACULTY_CCC = new Faculty(LONG_NUM_1, NAME_CCC, COLOR_AAA, STUDENT_LIST_1);
+    public static Faculty FACULTY_BBB = new Faculty(LONG_NUM_2, NAME_BBB, COLOR_BBB, STUDENT_LIST_1);
+    public static Faculty FACULTY_CCC = new Faculty(LONG_NUM_3, NAME_CCC, COLOR_AAA, STUDENT_LIST_1);
 
     public static Student STUDENT_AAA = new Student(LONG_NUM_1, NAME_AAA, NUM_1, FACULTY_AAA);
     public static Student STUDENT_BBB = new Student(LONG_NUM_2, NAME_BBB, NUM_2, FACULTY_BBB);
-    public static Student STUDENT_CCC = new Student(LONG_NUM_3, NAME_CCC, NUM_1, FACULTY_CCC);
+    public static Student STUDENT_CCC = new Student(LONG_NUM_3, NAME_CCC, NUM_1, FACULTY_AAA);
 
 }

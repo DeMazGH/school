@@ -47,7 +47,7 @@ public class FacultyService {
         facultyRepository.deleteById(id);
     }
 
-    public Collection<Student> getStudentsByFaculty(long facultyId) {
+    public Collection<Student> getStudentsByFacultyId(long facultyId) {
         return studentRepository.findStudentByFacultyId(facultyId);
     }
 }

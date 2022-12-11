@@ -52,7 +52,7 @@ public class FacultyController {
         if (facultyService.findFaculty(facultyId) == null) {
             ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(facultyService.getStudentsByFaculty(facultyId));
+        return ResponseEntity.ok(facultyService.getStudentsByFacultyId(facultyId));
     }
 
     @PutMapping
