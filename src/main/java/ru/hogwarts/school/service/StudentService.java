@@ -5,6 +5,7 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.Collection;
+import java.util.Objects;
 
 @Service
 public class StudentService {
@@ -27,8 +28,12 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-    public Collection<Student> findByAge(int age) {
-        return findAllStudents().stream().filter(student -> student.getAge() == age).toList();
+    public Collection<Student> findByAge(Integer age) {
+        return findAllStudents().stream().filter(student -> Objects.equals(student.getAge(), age)).toList();
+    }
+
+    public Collection<Student> findByAgeBetween(Integer min, Integer max) {
+        return studentRepository.findByAgeBetween(min, max);
     }
 
     public Student updateStudent(Student student) {
