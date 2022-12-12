@@ -12,8 +12,10 @@ import ru.hogwarts.school.repository.StudentRepository;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 import static ru.hogwarts.school.Constant.*;
 
@@ -35,13 +37,12 @@ class StudentServiceTest {
         assertEquals(STUDENT_AAA, actual);
     }
 
-//    @Test
-//    void shouldReturnStudentInMethodFind() {
-//        when(studentRepositoryMock.findById(LONG_NUM_2).get()).thenReturn(STUDENT_BBB);
-//        Student actual = out.findStudent(LONG_NUM_2);
-//        assertEquals(STUDENT_BBB, actual);
-//    }
-    //тест не проходит из-за - NoSuchElementException: No value present
+    @Test
+    void shouldReturnStudentInMethodFind() {
+        when(studentRepositoryMock.findById(LONG_NUM_2)).thenReturn(Optional.of(STUDENT_BBB));
+        Student actual = out.findStudent(LONG_NUM_2);
+        assertEquals(STUDENT_BBB, actual);
+    }
 
 
     @Test
@@ -65,10 +66,9 @@ class StudentServiceTest {
 
         List<Student> actual = new ArrayList<>();
         actual.add(STUDENT_AAA);
-        actual.add(STUDENT_BBB);
         actual.add(STUDENT_CCC);
 
-        when(studentRepositoryMock.findAll()).thenReturn(actual);
+        when(studentRepositoryMock.findByAge(NUM_1)).thenReturn(actual);
 
         actual = (List<Student>) out.findByAge(NUM_1);
         assertEquals(expected, actual);
@@ -92,9 +92,17 @@ class StudentServiceTest {
 
     @Test
     void shouldReturnStudentInMethodUpdateStudent() {
+        when(studentRepositoryMock.findById(LONG_NUM_1)).thenReturn(Optional.of(STUDENT_AAA));
         when(studentRepositoryMock.save(STUDENT_AAA)).thenReturn(STUDENT_AAA);
         Student actual = out.updateStudent(STUDENT_AAA);
         assertEquals(STUDENT_AAA, actual);
+    }
+
+    @Test
+    void shouldReturnNullInMethodUpdateStudent() {
+        when(studentRepositoryMock.findById(LONG_NUM_1)).thenReturn(Optional.empty());
+        Student actual = out.updateStudent(STUDENT_AAA);
+        assertNull(actual);
     }
 
     @Test
@@ -102,5 +110,12 @@ class StudentServiceTest {
         when(studentRepositoryMock.findStudentById(LONG_NUM_1)).thenReturn(STUDENT_AAA);
         Faculty actual = out.getFacultyByStudentId(LONG_NUM_1);
         assertEquals(FACULTY_AAA, actual);
+    }
+
+    @Test
+    void shouldReturnNullInMethodGetFacultyByStudentId() {
+        when(studentRepositoryMock.findStudentById(LONG_NUM_1)).thenReturn(null);
+        Faculty actual = out.getFacultyByStudentId(LONG_NUM_1);
+        assertNull(actual);
     }
 }

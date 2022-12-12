@@ -13,8 +13,10 @@ import ru.hogwarts.school.repository.StudentRepository;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 import static ru.hogwarts.school.Constant.*;
 
@@ -38,13 +40,12 @@ class FacultyServiceTest {
     }
 
 
-//    @Test
-//    void shouldReturnFacultyInMethodFindFaculty() {
-//        when(facultyRepositoryMock.findById(LONG_NUM_1).get()).thenReturn(FACULTY_AAA);
-//        Faculty actual = out.findFaculty(LONG_NUM_1);
-//        assertEquals(FACULTY_AAA, actual);
-//    }
-    //тест не проходит из-за - NoSuchElementException: No value present
+    @Test
+    void shouldReturnFacultyInMethodFindFaculty() {
+        when(facultyRepositoryMock.findById(LONG_NUM_1)).thenReturn(Optional.of(FACULTY_AAA));
+        Faculty actual = out.findFaculty(LONG_NUM_1);
+        assertEquals(FACULTY_AAA, actual);
+    }
 
     @Test
     void shouldReturnCorrectListInMethodFindAllFaculties() {
@@ -65,28 +66,36 @@ class FacultyServiceTest {
         expected.add(FACULTY_AAA);
         expected.add(FACULTY_CCC);
 
-        when(facultyRepositoryMock.findFacultyByColorIgnoreCase(COLOR_AAA)).thenReturn(expected);
+        when(facultyRepositoryMock.findFacultyByColor(COLOR_AAA)).thenReturn(expected);
         Collection<Faculty> actual = out.findByColor(COLOR_AAA);
 
         assertEquals(expected, actual);
     }
 
     @Test
-    void shouldReturnCorrectListInMethodFindByName() {
+    void shouldReturnCorrectListInMethodFindFacultyByColorOrName() {
         List<Faculty> expected = new ArrayList<>();
         expected.add(FACULTY_AAA);
 
-        when(facultyRepositoryMock.findFacultyByNameIgnoreCase(NAME_AAA)).thenReturn(expected);
-        Collection<Faculty> actual = out.findByName(NAME_AAA);
+        when(facultyRepositoryMock.findFacultyByNameIgnoreCaseOrColorIgnoreCase(STRING_AAA, STRING_AAA)).thenReturn(expected);
+        Collection<Faculty> actual = out.findFacultyByColorOrName(STRING_AAA);
 
         assertEquals(expected, actual);
     }
 
     @Test
     void shouldReturnStudentInMethodUpdateFaculty() {
+        when(facultyRepositoryMock.findById(LONG_NUM_1)).thenReturn(Optional.of(FACULTY_AAA));
         when(facultyRepositoryMock.save(FACULTY_AAA)).thenReturn(FACULTY_AAA);
         Faculty actual = out.updateFaculty(FACULTY_AAA);
         assertEquals(FACULTY_AAA, actual);
+    }
+
+    @Test
+    void shouldReturnNullInMethodUpdateFaculty() {
+        when(facultyRepositoryMock.findById(LONG_NUM_1)).thenReturn(Optional.empty());
+        Faculty actual = out.updateFaculty(FACULTY_AAA);
+        assertNull(actual);
     }
 
     @Test

@@ -29,7 +29,7 @@ public class StudentController {
     public ResponseEntity<Student> findStudent(@PathVariable long studentId) {
         Student student = studentService.findStudent(studentId);
         if (student == null) {
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(student);
     }
@@ -38,19 +38,23 @@ public class StudentController {
     public ResponseEntity<Faculty> getFacultyByStudentId(@PathVariable long studentId) {
         Faculty faculty = studentService.getFacultyByStudentId(studentId);
         if (faculty == null) {
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(faculty);
     }
 
     @GetMapping()
-    public ResponseEntity<Collection<Student>> findStudentsFromAge(@RequestParam(required = false) Integer studentAge,
-                                                                   @RequestParam(required = false) Integer minAge,
-                                                                   @RequestParam(required = false) Integer maxAge) {
+    public ResponseEntity<Collection<Student>> findStudentsFromAge(@RequestParam Integer studentAge) {
         if (studentAge != null) {
             return ResponseEntity.ok(studentService.findByAge(studentAge));
         }
-        if (minAge != null && maxAge != null && minAge >= 0) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @GetMapping("/findStudentByAgeInInterval")
+    public ResponseEntity<Collection<Student>> findStudentsFromAgeInTheInterval(@RequestParam Integer minAge,
+                                                                                @RequestParam Integer maxAge) {
+        if (minAge != null && maxAge != null && minAge >= 0 && minAge < maxAge) {
             return ResponseEntity.ok(studentService.findByAgeBetween(minAge, maxAge));
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -60,7 +64,7 @@ public class StudentController {
     public ResponseEntity<Student> updateStudent(@RequestBody Student student) {
         Student updatedStudent = studentService.updateStudent(student);
         if (updatedStudent == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(updatedStudent);
     }

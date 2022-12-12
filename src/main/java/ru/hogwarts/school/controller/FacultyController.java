@@ -1,6 +1,5 @@
 package ru.hogwarts.school.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
@@ -30,27 +29,31 @@ public class FacultyController {
     public ResponseEntity<Faculty> findFaculty(@PathVariable long facultyId) {
         Faculty faculty = facultyService.findFaculty(facultyId);
         if (faculty == null) {
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(faculty);
     }
 
-    @GetMapping()
-    public ResponseEntity<Collection<Faculty>> findFacultiesByColor(@RequestParam(required = false) String color,
-                                                                    @RequestParam(required = false) String name) {
+    @GetMapping("/findByColor")
+    public ResponseEntity<Collection<Faculty>> findFacultiesByColor(@RequestParam String color) {
         if (color != null && !color.isBlank()) {
             return ResponseEntity.ok(facultyService.findByColor(color));
-        }
-        if (name != null && !name.isBlank()) {
-            return ResponseEntity.ok(facultyService.findByName(name));
         }
         return ResponseEntity.ok(Collections.emptyList());
     }
 
-    @GetMapping("/getStudentsByFaculty/{facultyId}")
+    @GetMapping("/findByColorOrName")
+    public ResponseEntity<Collection<Faculty>> findFacultiesByColorOrName(@RequestParam String nameOrColor) {
+        if (nameOrColor != null && !nameOrColor.isBlank()) {
+            return ResponseEntity.ok(facultyService.findFacultyByColorOrName(nameOrColor));
+        }
+        return ResponseEntity.ok(Collections.emptyList());
+    }
+
+    @GetMapping("/{facultyId}/students")
     public ResponseEntity<Collection<Student>> getStudentsByFaculty(@PathVariable long facultyId) {
         if (facultyService.findFaculty(facultyId) == null) {
-            ResponseEntity.notFound().build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(facultyService.getStudentsByFacultyId(facultyId));
     }
@@ -59,7 +62,7 @@ public class FacultyController {
     public ResponseEntity<Faculty> updateFaculty(@RequestBody Faculty faculty) {
         Faculty updatedFaculty = facultyService.updateFaculty(faculty);
         if (updatedFaculty == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(updatedFaculty);
     }

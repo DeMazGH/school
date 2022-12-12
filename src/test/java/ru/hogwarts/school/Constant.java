@@ -17,6 +17,7 @@ public class Constant {
     public static int NUM_3 = 3;
     public static int NUM_4 = 4;
 
+    public static String STRING_AAA = "stringAAA";
     public static String NAME_AAA = "nameAAA";
     public static String NAME_BBB = "nameBBB";
     public static String NAME_CCC = "nameCCC";
