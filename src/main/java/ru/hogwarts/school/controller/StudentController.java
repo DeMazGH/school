@@ -1,6 +1,5 @@
 package ru.hogwarts.school.controller;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
@@ -45,19 +44,13 @@ public class StudentController {
 
     @GetMapping()
     public ResponseEntity<Collection<Student>> findStudentsFromAge(@RequestParam Integer studentAge) {
-        if (studentAge != null) {
-            return ResponseEntity.ok(studentService.findByAge(studentAge));
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.ok(studentService.findByAge(studentAge));
     }
 
     @GetMapping("/findStudentByAgeInInterval")
     public ResponseEntity<Collection<Student>> findStudentsFromAgeInTheInterval(@RequestParam Integer minAge,
                                                                                 @RequestParam Integer maxAge) {
-        if (minAge != null && maxAge != null && minAge >= 0 && minAge < maxAge) {
-            return ResponseEntity.ok(studentService.findByAgeBetween(minAge, maxAge));
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.ok(studentService.findByAgeBetween(minAge, maxAge));
     }
 
     @PutMapping
