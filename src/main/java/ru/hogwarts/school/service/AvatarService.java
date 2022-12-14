@@ -2,6 +2,7 @@ package ru.hogwarts.school.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.model.Avatar;
 import ru.hogwarts.school.model.Student;
@@ -16,6 +17,7 @@ import java.util.Objects;
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
 @Service
+//@Transactional
 public class AvatarService {
 
     @Value("${avatars.dir.path}")
