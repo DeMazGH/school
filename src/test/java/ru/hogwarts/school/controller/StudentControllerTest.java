@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.annotation.DirtiesContext;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 
 import static org.assertj.core.api.Assertions.*;
 
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class StudentControllerTest {
 
@@ -37,7 +39,6 @@ class StudentControllerTest {
         faculty.setColor("TestColor");
 
         Student student = new Student();
-        student.setId(1L);
         student.setAge(10);
         student.setName("TestStudent1");
         student.setFaculty(faculty);
@@ -47,7 +48,6 @@ class StudentControllerTest {
                         + "/student", student, String.class))
                 .isNotNull();
 
-        this.restTemplate.delete("http://localhost:" + port + "/student/1");
     }
 
     @Test

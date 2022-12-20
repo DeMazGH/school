@@ -26,6 +26,14 @@ public class Student {
         this.faculty = faculty;
     }
 
+    public Student (String name, Integer age) {
+        this(name, age, null);
+    }
+
+    public Student (String name, Integer age, Faculty faculty) {
+        this(null, name, age, faculty);
+    }
+
     public Student() {
     }
 
