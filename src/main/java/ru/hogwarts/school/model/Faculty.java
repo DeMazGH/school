@@ -26,6 +26,14 @@ public class Faculty {
         this.students = students;
     }
 
+    public Faculty(String name, String color) {
+        this(name, color, null);
+    }
+
+    public Faculty(String name, String color, List<Student> students) {
+        this(null, name, color, students);
+    }
+
     public Faculty() {
     }
 
