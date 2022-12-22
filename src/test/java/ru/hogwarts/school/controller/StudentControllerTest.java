@@ -63,7 +63,11 @@ class StudentControllerTest {
         Student student = new Student("StudentName", 15, faculty);
         ResponseEntity<Student> createResponse = whenSendingCreateStudentRequest(getUriBuilder().build().toUri(), student);
         thenStudentHasBeenCreated(createResponse);
+        student = createResponse.getBody();
 
+//        if (createResponse.getBody() != null) {
+//            student = createResponse.getBody();
+//        } else throw new NullPointerException();
 
         ResponseEntity<Faculty> receivedFaculty = whenFindingFacultyByStudentIdRequest(student);
         thenFacultyHasBeenFind(receivedFaculty);
@@ -82,8 +86,8 @@ class StudentControllerTest {
         whenSendingCreateStudentRequest(getUriBuilder().build().toUri(), student25);
 
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-        queryParams.add("age", "18");
-        thenStudentsAreFoundByCriteria(queryParams, student18);
+        queryParams.add("studentAge", "18");
+        thenStudentsAreFoundByAge(queryParams, student18);
     }
 
     @Test
@@ -169,6 +173,25 @@ class StudentControllerTest {
     }
 
     private void thenStudentsAreFoundByCriteria(MultiValueMap<String, String> queryParams, Student... student) {
+        URI uri = getUriBuilder().path("/findStudentByAgeInInterval").queryParams(queryParams).build().toUri();
+
+        ResponseEntity<Collection<Student>> response = restTemplate.exchange(
+                uri,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<Collection<Student>>() {
+                }
+        );
+
+        Assertions.assertThat(response.getBody()).isNotNull();
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        Collection<Student> actualResult = response.getBody();
+        resetIds(actualResult);
+        Assertions.assertThat(actualResult).containsExactlyInAnyOrder(student);
+    }
+
+    private void thenStudentsAreFoundByAge(MultiValueMap<String, String> queryParams, Student... student) {
         URI uri = getUriBuilder().queryParams(queryParams).build().toUri();
 
         ResponseEntity<Collection<Student>> response = restTemplate.exchange(
