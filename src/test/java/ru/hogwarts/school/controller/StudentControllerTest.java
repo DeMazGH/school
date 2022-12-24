@@ -63,11 +63,9 @@ class StudentControllerTest {
         Student student = new Student("StudentName", 15, faculty);
         ResponseEntity<Student> createResponse = whenSendingCreateStudentRequest(getUriBuilder().build().toUri(), student);
         thenStudentHasBeenCreated(createResponse);
-        student = createResponse.getBody();
 
-//        if (createResponse.getBody() != null) {
-//            student = createResponse.getBody();
-//        } else throw new NullPointerException();
+        Assertions.assertThat(createResponse.getBody()).isNotNull();
+        student = createResponse.getBody();
 
         ResponseEntity<Faculty> receivedFaculty = whenFindingFacultyByStudentIdRequest(student);
         thenFacultyHasBeenFind(receivedFaculty);
@@ -156,12 +154,17 @@ class StudentControllerTest {
     private void thenFacultyHasBeenFind(ResponseEntity<Faculty> response) {
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         Assertions.assertThat(response.getBody()).isNotNull();
+        Assertions.assertThat(response.getBody().getId()).isNotNull();
+        Assertions.assertThat(response.getBody().getName()).isNotNull();
+        Assertions.assertThat(response.getBody().getColor()).isNotNull();
     }
 
     private void thenStudentHasBeenCreated(ResponseEntity<Student> response) {
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         Assertions.assertThat(response.getBody()).isNotNull();
         Assertions.assertThat(response.getBody().getId()).isNotNull();
+        Assertions.assertThat(response.getBody().getName()).isNotNull();
+        Assertions.assertThat(response.getBody().getAge()).isNotNull();
     }
 
     private void thenStudentWithIdHasBeenFound(Long studentId, Student student) {
