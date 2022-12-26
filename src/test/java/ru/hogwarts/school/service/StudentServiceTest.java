@@ -118,4 +118,32 @@ class StudentServiceTest {
         Faculty actual = out.getFacultyByStudentId(LONG_NUM_1);
         assertNull(actual);
     }
+
+    @Test
+    void shouldReturnLongNumInMethodGetAmountOfAllStudents() {
+        when(studentRepositoryMock.getAmountOfAllStudents()).thenReturn(LONG_NUM_2);
+        Long actual = out.getAmountOfAllStudents();
+        assertEquals(LONG_NUM_2, actual);
+    }
+
+    @Test
+    void shouldReturnDoubleNumInMethodGetAverageAgeOfAllStudents() {
+        when(studentRepositoryMock.getAverageAgeOfAllStudents()).thenReturn(DOUBLE_NUM_1);
+        Double actual = out.getAverageAgeOfAllStudents();
+        assertEquals(DOUBLE_NUM_1, actual);
+    }
+
+    @Test
+    void shouldReturnListOfStudentsInMethodGetFiveLatestStudents() {
+        List<Student> students = new ArrayList<>();
+        students.add(STUDENT_EEE);
+        students.add(STUDENT_DDD);
+        students.add(STUDENT_CCC);
+        students.add(STUDENT_BBB);
+        students.add(STUDENT_AAA);
+
+        when(studentRepositoryMock.getFiveLatestStudents()).thenReturn(students);
+        List<Student> actual = out.getFiveLatestStudents();
+        assertEquals(students, actual);
+    }
 }
