@@ -23,7 +23,7 @@ import static java.nio.file.StandardOpenOption.CREATE_NEW;
 //@Transactional
 public class AvatarService {
 
-    Logger logger = LoggerFactory.getLogger(AvatarService.class);
+    private final Logger logger = LoggerFactory.getLogger(AvatarService.class);
 
     @Value("${avatars.dir.path}")
     private String avatarsDir;
