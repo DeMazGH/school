@@ -189,6 +189,25 @@ class StudentControllerTest {
         thanAmountOfAllStudentsHasBeenReceived(expectedAmountOfStudents);
     }
 
+    @Test
+    void testGetStudentsWithNameIsStartsFromA() {
+        Student studentWithNameIsStartsFromA1 = givenStudentWith("Андрей", 15);
+        Student studentWithNameIsStartsFromA2 = givenStudentWith("Анна", 18);
+        Student studentWithNameIsStartsFromAInLowerCase = givenStudentWith("алексей", 22);
+        Student studentWithNameIsStartsFromOtherLiteral = givenStudentWith("Борис", 21);
+
+        whenSendingCreateStudentRequest(getUriBuilder().build().toUri(), studentWithNameIsStartsFromA1);
+        whenSendingCreateStudentRequest(getUriBuilder().build().toUri(), studentWithNameIsStartsFromA2);
+        whenSendingCreateStudentRequest(getUriBuilder().build().toUri(), studentWithNameIsStartsFromAInLowerCase);
+        whenSendingCreateStudentRequest(getUriBuilder().build().toUri(), studentWithNameIsStartsFromOtherLiteral);
+
+        Collection<Student> expected = new ArrayList<>();
+        expected.add(studentWithNameIsStartsFromA1);
+        expected.add(studentWithNameIsStartsFromA2);
+
+        thanListOfStudentsWithNameIsStartsFromAHasBeenReceived(expected);
+    }
+
     private Student givenStudentWith(String name, int age) {
         return new Student(name, age);
     }
@@ -337,5 +356,24 @@ class StudentControllerTest {
 
         Assertions.assertThat(response.getBody()).isEqualTo(expectedAmountOfStudents);
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    private void thanListOfStudentsWithNameIsStartsFromAHasBeenReceived(Collection<Student> expected) {
+        URI uri = getUriBuilder().path("/getStudentsWithNameIsStartsFromA").build().toUri();
+
+        ResponseEntity<Collection<Student>> response = restTemplate.exchange(
+                uri,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<Collection<Student>>() {
+                }
+        );
+
+        Assertions.assertThat(response.getBody()).isNotNull();
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        Collection<Student> actual = response.getBody();
+        resetIds(actual);
+        Assertions.assertThat(expected).isEqualTo(actual);
     }
 }

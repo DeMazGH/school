@@ -146,4 +146,27 @@ class StudentServiceTest {
         List<Student> actual = out.getFiveLatestStudents();
         assertEquals(students, actual);
     }
+
+    @Test
+    void shouldReturnListOfStudentsInMethodGetStudentsWithNameIsStartsFromA() {
+        Student testStudent1 = new Student("Андрей", 18);
+        Student testStudent2 = new Student("Анна", 19);
+        Student testStudent3 = new Student("алексей", 20);
+
+        List<Student> students = new ArrayList<>();
+        students.add(STUDENT_AAA);
+        students.add(STUDENT_BBB);
+        students.add(STUDENT_CCC);
+        students.add(testStudent1);
+        students.add(testStudent2);
+        students.add(testStudent3);
+
+        List<Student> expected = new ArrayList<>();
+        expected.add(testStudent1);
+        expected.add(testStudent2);
+
+        when(studentRepositoryMock.findAll()).thenReturn(students);
+        List<Student> actual = out.getStudentsWithNameIsStartsFromA();
+        assertEquals(expected, actual);
+    }
 }

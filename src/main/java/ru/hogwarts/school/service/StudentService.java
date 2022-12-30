@@ -83,4 +83,11 @@ public class StudentService {
         logger.info("Was invoked method - getFiveLatestStudents");
         return studentRepository.getFiveLatestStudents();
     }
+
+    public List<Student> getStudentsWithNameIsStartsFromA() {
+        logger.info("Was invoked method - getStudentsWithNameIsStartsFromA");
+        return studentRepository.findAll().stream()
+                .filter(student -> student.getName().startsWith("А"))
+                .toList();
+    }
 }
