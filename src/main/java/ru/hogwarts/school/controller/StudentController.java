@@ -83,8 +83,8 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getAmountOfAllStudents());
     }
 
-    @GetMapping("/getStudentsWithNameIsStartsFromA")
-    public ResponseEntity<Collection<Student>> getStudentsWithNameIsStartsFromA() {
-        return ResponseEntity.ok(studentService.getStudentsWithNameIsStartsFromA());
+    @GetMapping("/getStudentsNameIsStartsFromA")
+    public ResponseEntity<Collection<String>> getStudentsNameIsStartsFromA() {
+        return ResponseEntity.ok(studentService.getStudentsNameIsStartsFromA());
     }
 }

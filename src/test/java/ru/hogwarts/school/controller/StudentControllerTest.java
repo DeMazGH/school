@@ -201,11 +201,11 @@ class StudentControllerTest {
         whenSendingCreateStudentRequest(getUriBuilder().build().toUri(), studentWithNameIsStartsFromAInLowerCase);
         whenSendingCreateStudentRequest(getUriBuilder().build().toUri(), studentWithNameIsStartsFromOtherLiteral);
 
-        Collection<Student> expected = new ArrayList<>();
-        expected.add(studentWithNameIsStartsFromA1);
-        expected.add(studentWithNameIsStartsFromA2);
+        Collection<String> expected = new ArrayList<>();
+        expected.add(studentWithNameIsStartsFromA1.getName());
+        expected.add(studentWithNameIsStartsFromA2.getName());
 
-        thanListOfStudentsWithNameIsStartsFromAHasBeenReceived(expected);
+        thanListOfStudentsNameIsStartsFromAHasBeenReceived(expected);
     }
 
     private Student givenStudentWith(String name, int age) {
@@ -358,22 +358,21 @@ class StudentControllerTest {
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
-    private void thanListOfStudentsWithNameIsStartsFromAHasBeenReceived(Collection<Student> expected) {
-        URI uri = getUriBuilder().path("/getStudentsWithNameIsStartsFromA").build().toUri();
+    private void thanListOfStudentsNameIsStartsFromAHasBeenReceived(Collection<String> expected) {
+        URI uri = getUriBuilder().path("/getStudentsNameIsStartsFromA").build().toUri();
 
-        ResponseEntity<Collection<Student>> response = restTemplate.exchange(
+        ResponseEntity<Collection<String>> response = restTemplate.exchange(
                 uri,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<Collection<Student>>() {
+                new ParameterizedTypeReference<Collection<String>>() {
                 }
         );
 
         Assertions.assertThat(response.getBody()).isNotNull();
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        Collection<Student> actual = response.getBody();
-        resetIds(actual);
+        Collection<String> actual = response.getBody();
         Assertions.assertThat(expected).isEqualTo(actual);
     }
 }

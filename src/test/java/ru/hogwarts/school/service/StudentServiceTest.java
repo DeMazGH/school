@@ -161,12 +161,12 @@ class StudentServiceTest {
         students.add(testStudent2);
         students.add(testStudent3);
 
-        List<Student> expected = new ArrayList<>();
-        expected.add(testStudent1);
-        expected.add(testStudent2);
+        List<String> expected = new ArrayList<>();
+        expected.add(testStudent1.getName());
+        expected.add(testStudent2.getName());
 
         when(studentRepositoryMock.findAll()).thenReturn(students);
-        List<Student> actual = out.getStudentsWithNameIsStartsFromA();
+        List<String> actual = out.getStudentsNameIsStartsFromA();
         assertEquals(expected, actual);
     }
 }
