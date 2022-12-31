@@ -16,12 +16,14 @@ import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
 import ru.hogwarts.school.service.FacultyService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static ru.hogwarts.school.Constant.*;
 
 @WebMvcTest(controllers = FacultyController.class)
 class FacultyControllerTest {
@@ -226,5 +228,23 @@ class FacultyControllerTest {
         facultyObject.put("name", facultyName);
         facultyObject.put("color", facultyColor);
         return facultyObject;
+    }
+
+    @Test
+    void getLongestFacultyNameTest() throws Exception {
+        List<Faculty> faculties = new ArrayList<>();
+        faculties.add(FACULTY_AAA);
+        faculties.add(FACULTY_BBB);
+        faculties.add(FACULTY_LONGEST_NAME);
+
+        when(facultyRepository.findAll()).thenReturn(faculties);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/faculty/getLongestFacultyName")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value(NAME_LONGEST));
+
+        verify(facultyRepository, atLeastOnce()).findAll();
     }
 }

@@ -109,4 +109,17 @@ class FacultyServiceTest {
         Collection<Student> actual = out.getStudentsByFacultyId(LONG_NUM_1);
         assertEquals(expected, actual);
     }
+
+    @Test
+    void shouldReturnStringInMethodGetLongestFacultyName() {
+        List<Faculty> faculties = new ArrayList<>();
+        faculties.add(FACULTY_AAA);
+        faculties.add(FACULTY_BBB);
+        faculties.add(FACULTY_LONGEST_NAME);
+
+        when(facultyRepositoryMock.findAll()).thenReturn(faculties);
+
+        String actual = out.getLongestFacultyName();
+        assertEquals(NAME_LONGEST, actual);
+    }
 }

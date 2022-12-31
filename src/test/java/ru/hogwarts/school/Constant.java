@@ -25,6 +25,7 @@ public class Constant {
     public static String NAME_CCC = "nameCCC";
     public static String NAME_DDD = "nameDDD";
     public static String NAME_EEE = "nameEEE";
+    public static String NAME_LONGEST = "nameLONGEST";
 
     public static String COLOR_AAA = "colorAAA";
     public static String COLOR_BBB = "colorBBB";
@@ -34,6 +35,7 @@ public class Constant {
     public static Faculty FACULTY_AAA = new Faculty(LONG_NUM_1, NAME_AAA, COLOR_AAA, STUDENT_LIST_1);
     public static Faculty FACULTY_BBB = new Faculty(LONG_NUM_2, NAME_BBB, COLOR_BBB, STUDENT_LIST_1);
     public static Faculty FACULTY_CCC = new Faculty(LONG_NUM_3, NAME_CCC, COLOR_AAA, STUDENT_LIST_1);
+    public static Faculty FACULTY_LONGEST_NAME = new Faculty(NAME_LONGEST, COLOR_CCC);
 
     public static Student STUDENT_AAA = new Student(LONG_NUM_1, NAME_AAA, NUM_1, FACULTY_AAA);
     public static Student STUDENT_BBB = new Student(LONG_NUM_2, NAME_BBB, NUM_2, FACULTY_BBB);

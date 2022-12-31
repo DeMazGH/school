@@ -94,6 +94,7 @@ public class StudentService {
     }
 
     public Double getAverageAgeOfAllStudentsWithStreams() {
+        logger.info("Was invoked method - getAverageAgeOfAllStudentsWithStreams");
         return studentRepository.findAll().stream()
                 .mapToDouble(Student::getAge)
                 .average()
