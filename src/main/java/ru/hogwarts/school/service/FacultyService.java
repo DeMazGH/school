@@ -10,6 +10,7 @@ import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.stream.Stream;
 
 @Service
 public class FacultyService {
