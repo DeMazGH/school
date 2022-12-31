@@ -169,4 +169,18 @@ class StudentServiceTest {
         List<String> actual = out.getStudentsNameIsStartsFromA();
         assertEquals(expected, actual);
     }
+
+    @Test
+    void shouldReturnDoubleNumInMethodGetAverageAgeOfAllStudentsWithStreams() {
+        List<Student> students = new ArrayList<>();
+        students.add(STUDENT_AAA);
+        students.add(STUDENT_BBB);
+        students.add(STUDENT_CCC);
+
+        when(studentRepositoryMock.findAll()).thenReturn(students);
+
+        Double expected = 1d * (STUDENT_AAA.getAge() + STUDENT_BBB.getAge() + STUDENT_CCC.getAge()) / students.size();
+        Double actual = out.getAverageAgeOfAllStudentsWithStreams();
+        assertEquals(expected, actual);
+    }
 }

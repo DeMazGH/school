@@ -87,4 +87,9 @@ public class StudentController {
     public ResponseEntity<Collection<String>> getStudentsNameIsStartsFromA() {
         return ResponseEntity.ok(studentService.getStudentsNameIsStartsFromA());
     }
+
+    @GetMapping("/getAverageAgeOfAllStudentsWithStreams")
+    public ResponseEntity<Double> getAverageAgeOfAllStudentsWithStreams() {
+        return ResponseEntity.ok(studentService.getAverageAgeOfAllStudentsWithStreams());
+    }
 }

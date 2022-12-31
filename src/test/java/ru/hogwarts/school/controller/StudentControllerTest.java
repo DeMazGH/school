@@ -208,6 +208,23 @@ class StudentControllerTest {
         thanListOfStudentsNameIsStartsFromAHasBeenReceived(expected);
     }
 
+    @Test
+    void testGetAverageAgeOfAllStudentsWithStreams() {
+        int age22 = 22;
+        int age25 = 25;
+        Double expectedAverageAge = (age22 + age25) / 2d;
+
+        Student student22 = givenStudentWith("StudentName3", age22);
+        Student student25 = givenStudentWith("StudentName4", age25);
+
+        ResponseEntity<Student> createResponse1 = whenSendingCreateStudentRequest(getUriBuilder().build().toUri(), student22);
+        ResponseEntity<Student> createResponse2 = whenSendingCreateStudentRequest(getUriBuilder().build().toUri(), student25);
+        thenStudentHasBeenCreated(createResponse1);
+        thenStudentHasBeenCreated(createResponse2);
+
+        thanAverageAgeOfAllStudentsWithStreamHasBeenReceived(expectedAverageAge);
+    }
+
     private Student givenStudentWith(String name, int age) {
         return new Student(name, age);
     }
@@ -374,5 +391,13 @@ class StudentControllerTest {
 
         Collection<String> actual = response.getBody();
         Assertions.assertThat(expected).isEqualTo(actual);
+    }
+
+    private void thanAverageAgeOfAllStudentsWithStreamHasBeenReceived(Double expectedAverageAge) {
+        URI uri = getUriBuilder().path("/getAverageAgeOfAllStudentsWithStreams").build().toUri();
+        ResponseEntity<Double> response = restTemplate.getForEntity(uri, Double.class);
+
+        Assertions.assertThat(response.getBody()).isEqualTo(expectedAverageAge);
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }
