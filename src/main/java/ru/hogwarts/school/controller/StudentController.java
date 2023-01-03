@@ -92,4 +92,16 @@ public class StudentController {
     public ResponseEntity<Double> getAverageAgeOfAllStudentsWithStreams() {
         return ResponseEntity.ok(studentService.getAverageAgeOfAllStudentsWithStreams());
     }
+
+    @GetMapping("/printInConsoleListOfStudentsNamesWithThreads")
+    public ResponseEntity<String> printInConsoleListOfStudentsNamesWithThreads() {
+        studentService.printInConsoleListOfStudentsNamesWithThreads();
+        return ResponseEntity.ok("Результат в консоли");
+    }
+
+    @GetMapping("/printInConsoleListOfStudentsNamesWithSynchronizedThreads")
+    public ResponseEntity<String> printInConsoleListOfStudentsNamesWithSynchronizedThreads() {
+        studentService.printInConsoleListOfStudentsNamesWithSynchronizedThreads();
+        return ResponseEntity.ok("Результат в консоли");
+    }
 }

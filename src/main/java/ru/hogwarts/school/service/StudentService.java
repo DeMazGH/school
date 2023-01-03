@@ -100,4 +100,42 @@ public class StudentService {
                 .average()
                 .orElse(Double.NaN);
     }
+
+    public void printInConsoleListOfStudentsNamesWithThreads() {
+        List<Student> studentList = studentRepository.findAll();
+
+        System.out.println(studentList.get(0).getName());
+        System.out.println(studentList.get(1).getName());
+
+        new Thread(() -> {
+            System.out.println(studentList.get(2).getName());
+            System.out.println(studentList.get(3).getName());
+        }).start();
+
+        new Thread(() -> {
+        System.out.println(studentList.get(4).getName());
+        System.out.println(studentList.get(5).getName());
+        }).start();
+    }
+
+    public void printInConsoleListOfStudentsNamesWithSynchronizedThreads() {
+        List<Student> studentList = studentRepository.findAll();
+
+        printStudentName(studentList.get(0));
+        printStudentName(studentList.get(1));
+
+        new Thread(() -> {
+            printStudentName(studentList.get(2));
+            printStudentName(studentList.get(3));
+        }).start();
+
+        new Thread(() -> {
+            printStudentName(studentList.get(4));
+            printStudentName(studentList.get(5));
+        }).start();
+    }
+
+    private synchronized void printStudentName(Student student) {
+        System.out.println(student.getName());
+    }
 }
