@@ -17,6 +17,8 @@ public class StudentService {
 
     private final Logger logger = LoggerFactory.getLogger(StudentService.class);
 
+    private volatile Integer count = 0;
+
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
@@ -113,29 +115,30 @@ public class StudentService {
         }).start();
 
         new Thread(() -> {
-        System.out.println(studentList.get(4).getName());
-        System.out.println(studentList.get(5).getName());
+            System.out.println(studentList.get(4).getName());
+            System.out.println(studentList.get(5).getName());
         }).start();
     }
 
     public void printInConsoleListOfStudentsNamesWithSynchronizedThreads() {
         List<Student> studentList = studentRepository.findAll();
 
-        printStudentName(studentList.get(0));
-        printStudentName(studentList.get(1));
+        printStudentName(studentList);
+        printStudentName(studentList);
 
         new Thread(() -> {
-            printStudentName(studentList.get(2));
-            printStudentName(studentList.get(3));
+            printStudentName(studentList);
+            printStudentName(studentList);
         }).start();
 
         new Thread(() -> {
-            printStudentName(studentList.get(4));
-            printStudentName(studentList.get(5));
+            printStudentName(studentList);
+            printStudentName(studentList);
         }).start();
     }
 
-    private synchronized void printStudentName(Student student) {
-        System.out.println(student.getName());
+    private synchronized void printStudentName(List<Student> studentList) {
+            System.out.println(studentList.get(count).getName());
+            count++;
     }
 }
