@@ -60,17 +60,17 @@ class StudentServiceTest {
 
     @Test
     void shouldReturnCorrectListInMethodFindByAge() {
-        List<Student> expected = new ArrayList<>();
+        Collection<Student> expected = new ArrayList<>();
         expected.add(STUDENT_AAA);
         expected.add(STUDENT_CCC);
 
-        List<Student> actual = new ArrayList<>();
+        Collection<Student> actual = new ArrayList<>();
         actual.add(STUDENT_AAA);
         actual.add(STUDENT_CCC);
 
         when(studentRepositoryMock.findByAge(NUM_1)).thenReturn(actual);
 
-        actual = (List<Student>) out.findByAge(NUM_1);
+        actual = out.findByAge(NUM_1);
         assertEquals(expected, actual);
     }
 
