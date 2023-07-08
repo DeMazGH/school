@@ -101,7 +101,7 @@ class FacultyControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/faculty/findByColor")
-                        .queryParam("color", facultyColor)
+                        .queryParam("nameOfColor", facultyColor)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(List.of(faculty1, faculty2))));
