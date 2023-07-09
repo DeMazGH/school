@@ -18,8 +18,9 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.13'
 	implementation 'org.postgresql:postgresql:42.5.1'
-	testImplementation 'com.h2database:h2:2.1.214'
+	testImplementation 'com.h2database:h2:2.2.220'
 	implementation 'org.liquibase:liquibase-core:4.18.0'
+	compileOnly 'org.projectlombok:lombok:1.18.28'
 }
 
 tasks.named('test') {
