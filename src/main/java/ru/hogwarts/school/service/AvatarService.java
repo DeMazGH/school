@@ -1,11 +1,12 @@
 package ru.hogwarts.school.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.hogwarts.school.exception.StudentNotFoundException;
 import ru.hogwarts.school.model.Avatar;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.AvatarRepository;
@@ -16,15 +17,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
-@Service
 //@Transactional
+@Slf4j
+@Service
+@RequiredArgsConstructor
 public class AvatarService {
-
-    private final Logger logger = LoggerFactory.getLogger(AvatarService.class);
 
     @Value("${avatars.dir.path}")
     private String avatarsDir;
@@ -32,14 +32,9 @@ public class AvatarService {
     private final AvatarRepository avatarRepository;
     private final StudentRepository studentRepository;
 
-    public AvatarService(AvatarRepository avatarRepository, StudentRepository studentRepository) {
-        this.avatarRepository = avatarRepository;
-        this.studentRepository = studentRepository;
-    }
-
     public void uploadAvatar(Long studentId, MultipartFile avatarFile) throws IOException {
-        logger.info("Was invoked method - uploadAvatar");
-        Student student = studentRepository.getById(studentId);
+        log.debug("Was invoked method - uploadAvatar");
+        Student student = studentRepository.findById(studentId).orElseThrow(StudentNotFoundException::new);
         Path filePath = Path.of(avatarsDir, student + "." +
                 getExtensions(Objects.requireNonNull(avatarFile.getOriginalFilename())));
         Files.createDirectories(filePath.getParent());
@@ -62,17 +57,17 @@ public class AvatarService {
     }
 
     public Avatar findAvatar(Long studentId) {
-        logger.info("Was invoked method - findAvatar");
+        log.debug("Was invoked method - findAvatar");
         return avatarRepository.findByStudentId(studentId).orElseThrow();
     }
 
     private String getExtensions(String fileName) {
-        logger.info("Was invoked method - getExtensions");
+        log.debug("Was invoked method - getExtensions");
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
     public List<Avatar> findByPagination(int page, int size) {
-        logger.info("Was invoked method - findByPagination");
+        log.debug("Was invoked method - findByPagination");
         PageRequest pageRequest = PageRequest.of(page - 1, size);
         return avatarRepository.findAll(pageRequest).getContent();
     }
