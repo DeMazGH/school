@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.service.StudentDataValidator;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
@@ -15,54 +16,49 @@ import java.util.Collection;
 public class StudentController {
 
     private final StudentService studentService;
+    private final StudentDataValidator studentDataValidator;
 
     @PostMapping
     public ResponseEntity<Student> createStudent(@RequestBody Student student) {
-        Student createdStudent = studentService.createStudent(student);
-        return ResponseEntity.ok(createdStudent);
+        return ResponseEntity.ok(studentService.createStudent(student));
     }
 
     @GetMapping("{studentId}")
-    public ResponseEntity<Student> findStudent(@PathVariable long studentId) {
-        Student student = studentService.findStudent(studentId);
-        if (student == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(student);
+    public ResponseEntity<Student> findStudent(@PathVariable(name = "studentId") long studentId) {
+        return ResponseEntity.ok(studentService.findStudent(studentId));
     }
 
     @GetMapping("/getStudentFaculty/{studentId}")
-    public ResponseEntity<Faculty> getFacultyByStudentId(@PathVariable long studentId) {
+    public ResponseEntity<Faculty> getFacultyByStudentId(@PathVariable(name = "studentId") long studentId) {
         Faculty faculty = studentService.getFacultyByStudentId(studentId);
         if (faculty == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok().eTag("Student not assigned faculty").build();
         }
         return ResponseEntity.ok(faculty);
     }
 
     @GetMapping()
-    public ResponseEntity<Collection<Student>> findStudentsFromAge(@RequestParam Integer studentAge) {
+    public ResponseEntity<Collection<Student>> findStudentsFromAge(@RequestParam int studentAge) {
         return ResponseEntity.ok(studentService.findByAge(studentAge));
     }
 
     @GetMapping("/findStudentByAgeInInterval")
-    public ResponseEntity<Collection<Student>> findStudentsFromAgeInTheInterval(@RequestParam Integer minAge,
-                                                                                @RequestParam Integer maxAge) {
-        return ResponseEntity.ok(studentService.findByAgeBetween(minAge, maxAge));
+    public ResponseEntity<Collection<Student>> findStudentsFromAgeInTheInterval(@RequestParam int minAge,
+                                                                                @RequestParam int maxAge) {
+        return ResponseEntity.ok(studentService.findStudentByAgeBetween(minAge, maxAge));
     }
 
     @PutMapping
     public ResponseEntity<Student> updateStudent(@RequestBody Student student) {
-        Student updatedStudent = studentService.updateStudent(student);
-        if (updatedStudent == null) {
-            return ResponseEntity.notFound().build();
+        if (studentDataValidator.studentDataIsValid(student)) {
+            return ResponseEntity.ok(studentService.updateStudent(student));
         }
-        return ResponseEntity.ok(updatedStudent);
+        return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("{studentId}")
-    public ResponseEntity<Student> removeStudent(@PathVariable long studentId) {
-        studentService.removeStudent(studentId);
+    public ResponseEntity<Student> deleteStudent(@PathVariable(name = "studentId") long studentId) {
+        studentService.deleteStudent(studentId);
         return ResponseEntity.ok().build();
     }
 

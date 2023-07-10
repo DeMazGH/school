@@ -3,6 +3,7 @@ package ru.hogwarts.school.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.exception.StudentNotFoundException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
@@ -27,7 +28,7 @@ public class StudentService {
 
     public Student findStudent(Long id) {
         log.debug("Was invoked method - findStudent");
-        return studentRepository.findById(id).orElse(null);
+        return studentRepository.findById(id).orElseThrow(StudentNotFoundException::new);
     }
 
     public Collection<Student> findAllStudents() {
@@ -35,14 +36,14 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-    public Collection<Student> findByAge(Integer age) {
+    public Collection<Student> findByAge(int age) {
         log.debug("Was invoked method - findByAge");
         return studentRepository.findByAge(age);
     }
 
-    public Collection<Student> findByAgeBetween(Integer min, Integer max) {
+    public Collection<Student> findStudentByAgeBetween(int min, int max) {
         log.debug("Was invoked method - findByAgeBetween");
-        return studentRepository.findByAgeBetween(min, max);
+        return studentRepository.findStudentByAgeBetween(min, max);
     }
 
     public Student updateStudent(Student student) {
@@ -50,21 +51,18 @@ public class StudentService {
         if (studentRepository.findById(student.getId()).isPresent()) {
             return studentRepository.save(student);
         }
-        return null;
+        throw new StudentNotFoundException();
     }
 
-    public void removeStudent(Long id) {
+    public void deleteStudent(long id) {
         log.debug("Was invoked method - removeStudent");
         studentRepository.deleteById(id);
     }
 
-    public Faculty getFacultyByStudentId(long studentId) {
+    public Faculty getFacultyByStudentId(Long studentId) {
         log.debug("Was invoked method - getFacultyByStudentId");
-        Student desiredStudent = studentRepository.findStudentById(studentId);
-        if (desiredStudent != null) {
-            return desiredStudent.getFaculty();
-        }
-        return null;
+        Student desiredStudent = studentRepository.findById(studentId).orElseThrow(StudentNotFoundException::new);
+        return desiredStudent.getFaculty();
     }
 
     public Long getAmountOfAllStudents() {
@@ -84,11 +82,7 @@ public class StudentService {
 
     public List<String> getStudentsNameIsStartsFromA() {
         log.debug("Was invoked method - getStudentsNameIsStartsFromA");
-        return studentRepository.findAll().stream()
-                .map(Student::getName)
-                .filter(names -> names.startsWith("А"))
-                .sorted()
-                .toList();
+        return studentRepository.getStudentsWhoseNamesIsStartsWithA();
     }
 
     public Double getAverageAgeOfAllStudentsWithStreams() {

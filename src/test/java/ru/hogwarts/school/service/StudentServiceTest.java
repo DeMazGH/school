@@ -84,9 +84,9 @@ class StudentServiceTest {
         actual.add(STUDENT_AAA);
         actual.add(STUDENT_CCC);
 
-        when(studentRepositoryMock.findByAgeBetween(NUM_1, NUM_1)).thenReturn(actual);
+        when(studentRepositoryMock.findStudentByAgeBetween(NUM_1, NUM_1)).thenReturn(actual);
 
-        actual = out.findByAgeBetween(NUM_1, NUM_1);
+        actual = out.findStudentByAgeBetween(NUM_1, NUM_1);
         assertEquals(expected, actual);
     }
 
@@ -149,9 +149,17 @@ class StudentServiceTest {
 
     @Test
     void shouldReturnListOfStudentsInMethodGetStudentsWithNameIsStartsFromA() {
-        Student testStudent1 = new Student("Андрей", 18);
-        Student testStudent2 = new Student("Анна", 19);
-        Student testStudent3 = new Student("алексей", 20);
+        Student testStudent1 = new Student();
+        testStudent1.setName("Андрей");
+        testStudent1.setAge(18);
+
+        Student testStudent2 = new Student();
+        testStudent2.setName("Анна");
+        testStudent2.setAge(19);
+
+        Student testStudent3 = new Student();
+        testStudent3.setName("алексей");
+        testStudent3.setAge(20);
 
         List<Student> students = new ArrayList<>();
         students.add(STUDENT_AAA);
