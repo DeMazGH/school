@@ -1,5 +1,6 @@
 package ru.hogwarts.school.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
@@ -10,13 +11,10 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping("/student")
+@RequiredArgsConstructor
 public class StudentController {
 
     private final StudentService studentService;
-
-    public StudentController(StudentService studentService) {
-        this.studentService = studentService;
-    }
 
     @PostMapping
     public ResponseEntity<Student> createStudent(@RequestBody Student student) {
