@@ -10,7 +10,6 @@ public class Constant {
     public static long LONG_NUM_1 = 1L;
     public static long LONG_NUM_2 = 2L;
     public static long LONG_NUM_3 = 3L;
-    public static long LONG_NUM_4 = 4L;
     public static double DOUBLE_NUM_1 = 1d;
 
     public static int NUM_1 = 1;
@@ -35,12 +34,27 @@ public class Constant {
     public static Faculty FACULTY_AAA = new Faculty(LONG_NUM_1, NAME_AAA, COLOR_AAA, STUDENT_LIST_1);
     public static Faculty FACULTY_BBB = new Faculty(LONG_NUM_2, NAME_BBB, COLOR_BBB, STUDENT_LIST_1);
     public static Faculty FACULTY_CCC = new Faculty(LONG_NUM_3, NAME_CCC, COLOR_AAA, STUDENT_LIST_1);
-    public static Faculty FACULTY_LONGEST_NAME = new Faculty(NAME_LONGEST, COLOR_CCC);
+    public static Faculty FACULTY_LONGEST_NAME = new Faculty();
+
+    static {
+        FACULTY_LONGEST_NAME.setName(NAME_LONGEST);
+        FACULTY_LONGEST_NAME.setColor(COLOR_CCC);
+    }
 
     public static Student STUDENT_AAA = new Student(LONG_NUM_1, NAME_AAA, NUM_1, FACULTY_AAA);
     public static Student STUDENT_BBB = new Student(LONG_NUM_2, NAME_BBB, NUM_2, FACULTY_BBB);
     public static Student STUDENT_CCC = new Student(LONG_NUM_3, NAME_CCC, NUM_1, FACULTY_AAA);
-    public static Student STUDENT_DDD = new Student(NAME_DDD, NUM_3);
-    public static Student STUDENT_EEE = new Student(NAME_EEE, NUM_4);
+    public static Student STUDENT_DDD = new Student();
 
+    static {
+        STUDENT_DDD.setName(NAME_DDD);
+        STUDENT_DDD.setAge(NUM_3);
+    }
+
+    public static Student STUDENT_EEE = new Student();
+
+    static {
+        STUDENT_EEE.setName(NAME_EEE);
+        STUDENT_EEE.setAge(NUM_4);
+    }
 }

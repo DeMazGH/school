@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -55,13 +55,21 @@ class StudentControllerTest {
         thenStudentHasBeenCreated(createResponse);
 
         Student createdStudent = createResponse.getBody();
+        assert createdStudent != null;
         thenStudentWithIdHasBeenFound(createdStudent.getId(), createdStudent);
     }
 
     @Test
     void testGetFacultyByStudentId() {
-        Faculty faculty = new Faculty("faculty", "red");
-        Student student = new Student("StudentName", 15, faculty);
+        Faculty faculty = new Faculty();
+        faculty.setName("faculty");
+        faculty.setColor("red");
+
+        Student student = new Student();
+        student.setName("StudentName");
+        student.setAge(15);
+        student.setFaculty(faculty);
+
         ResponseEntity<Student> createResponse = whenSendingCreateStudentRequest(getUriBuilder().build().toUri(), student);
         thenStudentHasBeenCreated(createResponse);
 
@@ -115,6 +123,7 @@ class StudentControllerTest {
         thenStudentHasBeenCreated(createResponse);
         Student createdStudent = createResponse.getBody();
 
+        assert createdStudent != null;
         whenUpdatingStudent(createdStudent, 23, "newName");
         thenStudentHasBeenUpdated(createdStudent, 23, "newName");
     }
@@ -127,6 +136,7 @@ class StudentControllerTest {
         thenStudentHasBeenCreated(createResponse);
         Student createdStudent = createResponse.getBody();
 
+        assert createdStudent != null;
         whenDeletingStudent(createdStudent);
         thenStudentNotFound(createdStudent);
     }
@@ -226,7 +236,10 @@ class StudentControllerTest {
     }
 
     private Student givenStudentWith(String name, int age) {
-        return new Student(name, age);
+        Student student = new Student();
+        student.setName(name);
+        student.setAge(age);
+        return student;
     }
 
     private ResponseEntity<Student> whenSendingCreateStudentRequest(URI uri, Student student) {
