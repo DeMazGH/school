@@ -119,7 +119,7 @@ class FacultyServiceTest {
 
         when(facultyRepositoryMock.findAll()).thenReturn(faculties);
 
-        String actual = out.getLongestFacultyName();
+        String actual = out.getLongestFacultyNameWithStream();
         assertEquals(NAME_LONGEST, actual);
     }
 }

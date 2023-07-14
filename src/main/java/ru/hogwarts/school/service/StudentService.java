@@ -22,7 +22,6 @@ public class StudentService {
 
     public Student createStudent(Student student) {
         log.debug("Was invoked method - createStudent");
-        student.setId(null);
         return studentRepository.save(student);
     }
 

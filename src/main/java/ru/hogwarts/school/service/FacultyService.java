@@ -3,6 +3,7 @@ package ru.hogwarts.school.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.exception.FacultyNotFoundException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
@@ -21,13 +22,12 @@ public class FacultyService {
 
     public Faculty createFaculty(Faculty faculty) {
         log.debug("Was invoked method - createFaculty");
-        faculty.setId(null);
         return facultyRepository.save(faculty);
     }
 
     public Faculty findFaculty(long id) {
         log.debug("Was invoked method - findFaculty");
-        return facultyRepository.findById(id).orElse(null);
+        return facultyRepository.findById(id).orElseThrow(FacultyNotFoundException::new);
     }
 
     public Collection<Faculty> findAllFaculties() {
@@ -50,7 +50,7 @@ public class FacultyService {
         if (facultyRepository.findById(faculty.getId()).isPresent()) {
             return facultyRepository.save(faculty);
         }
-        return null;
+        throw new FacultyNotFoundException();
     }
 
     public void removeFaculty(Long id) {
@@ -63,7 +63,7 @@ public class FacultyService {
         return studentRepository.findStudentByFacultyId(facultyId);
     }
 
-    public String getLongestFacultyName() {
+    public String getLongestFacultyNameWithStream() {
         log.debug("Was invoked method - getLongestFacultyName");
         return facultyRepository.findAll().stream()
                 .map(Faculty::getName)
