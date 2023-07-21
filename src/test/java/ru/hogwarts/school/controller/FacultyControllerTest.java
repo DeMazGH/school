@@ -14,6 +14,7 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
+import ru.hogwarts.school.service.FacultyDataValidator;
 import ru.hogwarts.school.service.FacultyService;
 
 import java.util.ArrayList;
@@ -39,6 +40,9 @@ class FacultyControllerTest {
 
     @SpyBean
     private FacultyService facultyService;
+
+    @SpyBean
+    private FacultyDataValidator facultyDataValidator;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -155,8 +159,15 @@ class FacultyControllerTest {
         String studentName2 = "studentNameTwo";
         Integer studentAge2 = 12;
 
-        Student student1 = new Student(studentName1, studentAge1, faculty);
-        Student student2 = new Student(studentName2, studentAge2, faculty);
+        Student student1 = new Student();
+        student1.setName(studentName1);
+        student1.setAge(studentAge1);
+        student1.setFaculty(faculty);
+
+        Student student2 = new Student();
+        student2.setName(studentName2);
+        student2.setAge(studentAge2);
+        student2.setFaculty(faculty);
 
         when(studentRepository.findStudentByFacultyId(id)).thenReturn(List.of(student1, student2));
         when(facultyRepository.findById(any(Long.class))).thenReturn(Optional.of(faculty));

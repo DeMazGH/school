@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.hogwarts.school.exception.StudentNotFoundException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
@@ -14,8 +15,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static ru.hogwarts.school.Constant.*;
 
@@ -84,9 +84,9 @@ class StudentServiceTest {
         actual.add(STUDENT_AAA);
         actual.add(STUDENT_CCC);
 
-        when(studentRepositoryMock.findByAgeBetween(NUM_1, NUM_1)).thenReturn(actual);
+        when(studentRepositoryMock.findStudentByAgeBetween(NUM_1, NUM_1)).thenReturn(actual);
 
-        actual = out.findByAgeBetween(NUM_1, NUM_1);
+        actual = out.findStudentByAgeBetween(NUM_1, NUM_1);
         assertEquals(expected, actual);
     }
 
@@ -99,24 +99,21 @@ class StudentServiceTest {
     }
 
     @Test
-    void shouldReturnNullInMethodUpdateStudent() {
-        when(studentRepositoryMock.findById(LONG_NUM_1)).thenReturn(Optional.empty());
-        Student actual = out.updateStudent(STUDENT_AAA);
-        assertNull(actual);
+    void shouldThrowStudentNotFoundExceptionInMethodUpdateStudent() {
+        when(studentRepositoryMock.findById(LONG_NUM_2)).thenReturn(Optional.empty());
+        assertThrows(StudentNotFoundException.class, () -> out.updateStudent(STUDENT_BBB));
     }
 
     @Test
     void shouldReturnFacultyInMethodGetFacultyByStudentId() {
-        when(studentRepositoryMock.findStudentById(LONG_NUM_1)).thenReturn(STUDENT_AAA);
+        when(studentRepositoryMock.findById(LONG_NUM_1)).thenReturn(Optional.ofNullable(STUDENT_AAA));
         Faculty actual = out.getFacultyByStudentId(LONG_NUM_1);
         assertEquals(FACULTY_AAA, actual);
     }
 
     @Test
-    void shouldReturnNullInMethodGetFacultyByStudentId() {
-        when(studentRepositoryMock.findStudentById(LONG_NUM_1)).thenReturn(null);
-        Faculty actual = out.getFacultyByStudentId(LONG_NUM_1);
-        assertNull(actual);
+    void shouldThrowStudentNotFoundExceptionInMethodGetFacultyByStudentId() {
+        assertThrows(StudentNotFoundException.class, () -> out.getFacultyByStudentId(LONG_NUM_1));
     }
 
     @Test
@@ -149,23 +146,15 @@ class StudentServiceTest {
 
     @Test
     void shouldReturnListOfStudentsInMethodGetStudentsWithNameIsStartsFromA() {
-        Student testStudent1 = new Student("Андрей", 18);
-        Student testStudent2 = new Student("Анна", 19);
-        Student testStudent3 = new Student("алексей", 20);
-
-        List<Student> students = new ArrayList<>();
-        students.add(STUDENT_AAA);
-        students.add(STUDENT_BBB);
-        students.add(STUDENT_CCC);
-        students.add(testStudent1);
-        students.add(testStudent2);
-        students.add(testStudent3);
+        List<String> studentsNames = new ArrayList<>();
+        studentsNames.add("Андрей");
+        studentsNames.add("Анна");
 
         List<String> expected = new ArrayList<>();
-        expected.add(testStudent1.getName());
-        expected.add(testStudent2.getName());
+        expected.add("Андрей");
+        expected.add("Анна");
 
-        when(studentRepositoryMock.findAll()).thenReturn(students);
+        when(studentRepositoryMock.getStudentsWhoseNamesIsStartsWithA()).thenReturn(studentsNames);
         List<String> actual = out.getStudentsNameIsStartsFromA();
         assertEquals(expected, actual);
     }
