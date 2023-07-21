@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.hogwarts.school.exception.FacultyNotFoundException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
@@ -15,8 +16,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static ru.hogwarts.school.Constant.*;
 
@@ -92,10 +92,9 @@ class FacultyServiceTest {
     }
 
     @Test
-    void shouldReturnNullInMethodUpdateFaculty() {
+    void shouldThrowFacultyNotFoundExceptionInMethodUpdateFaculty() {
         when(facultyRepositoryMock.findById(LONG_NUM_1)).thenReturn(Optional.empty());
-        Faculty actual = out.updateFaculty(FACULTY_AAA);
-        assertNull(actual);
+        assertThrows(FacultyNotFoundException.class, () -> out.updateFaculty(FACULTY_AAA));
     }
 
     @Test
